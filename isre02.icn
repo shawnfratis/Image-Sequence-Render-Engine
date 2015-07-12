@@ -1,0 +1,716 @@
+# isre means Image Sequence Render Engine. It's an experiment to create something
+# along the lines of a Raycaster, that stores frames as image sequences.
+# incomplete.
+
+link wopen
+link xcompat
+link color
+link graphics
+link numbers
+link options
+link button
+link dsetup
+link evmux
+link ivalue 
+link usage
+link strings
+
+procedure main()
+
+WOpen("label=FDraw01", "size=2700,900","bg=black","linewidth=1","fg=green")
+
+WAttrib("dx="||1,"dy="||1)
+
+repeat {
+
+################################
+w := Active() | stop("Active fails")
+     ################################
+   
+       case e := Event(w) of {
+	    &lpress | &mpress | &rpress: {
+	      x1 := &x
+	      y1 := &y
+	      x2 := y2 := &null
+	  }
+	  
+             &lrelease: {
+              DrawLine(x1,\y1,&x,&y)
+	    
+	  }
+	  &mrelease: {
+	      DrawLine(x1,y1,&x,&y)
+	      dragging := &null
+	  }
+#############ortho (finish)#################
+	  &rrelease: {
+	      DrawLine(x1,y1,&y,&y)
+   
+	  }
+	 
+########################################	  
+	  
+	  &ldrag : {
+	      DrawLine(x1,y1,&x,&y)
+      	      x1 := &x   
+	      y1 := &y
+	  }
+	  &mdrag: {
+	      if /dragging then dragging := 1
+	      else { 
+		  DrawLine(x1,y1,\x2,\y2)
+		  #DrawLine(x1,y1,\x2,\y2)
+	      }
+}
+#Work with this code to fix lines
+################################
+	     ################################
+           "\z": {
+	 
+	      WriteImage("C:/tp2.gif")
+             
+           }
+
+#####################################
+
+"\5": {
+	      WriteImage("C:/s01.gif")
+              }
+"\6": {
+	      WriteImage("C:/s02.gif")
+              }
+"\7": {
+	      WriteImage("C:/s03.gif")
+              }
+"\8": {
+	      WriteImage("C:/s04.gif")
+              }
+"\a": {
+	     ReadImage("C:/s01.gif",1,1)
+              }
+"\s": {
+	     ReadImage("C:/s02.gif",1,1)
+              }
+"\j": {
+	     ReadImage("C:/s03.gif",1,1)
+              }
+"\k": {
+	     ReadImage("C:/s04.gif",1,1)
+              }
+####################################################################
+"\1": {
+	      WriteImage("C:/z01.gif")
+              }
+"\2": {
+	      WriteImage("C:/z02.gif")
+              }
+"\3": {
+	      WriteImage("C:/z03.gif")
+              }
+"\4": {
+	      WriteImage("C:/z04.gif")
+              }
+"\q": {
+	     ReadImage("C:/z01.gif",1,1)
+              }
+"\w": {
+	     ReadImage("C:/z02.gif",1,1)
+              }
+"\u": {
+	     ReadImage("C:/z03.gif",1,1)
+              }
+"\i": {
+	     ReadImage("C:/z04.gif",1,1)
+              }
+#######################################################################
+
+"\]": {  system("C:/crap/3e6n/FDraw01.icn")
+
+        }
+"\'": {  grid()
+
+        }
+"\@": { exit()
+
+}
+
+"\>": { skew()
+
+}
+
+
+"\\": { fc02()
+
+	}
+
+"\.": { fc01() 
+}
+
+"\,": { scan()
+}
+
+"\;": { zoom01()
+	}
+     }
+  }
+WDone()
+#skew()
+end
+#################################################################
+procedure control01()
+
+end
+
+#######################################################################
+procedure scan()
+
+floorBack01()
+
+skew(1,1,1,1.09,1,1)
+WriteImage("C:/s01.gif")
+EraseArea()
+
+floorBack01()
+
+skew(1.1,1,1.1,1.08,1,1.07)
+WriteImage("C:/s02.gif")
+EraseArea()
+
+floorBack01()
+
+skew(1.2,1,1.2,1.07,1,1.15)
+WriteImage("C:/s03.gif")
+EraseArea()
+
+floorBack01()
+
+skew(1.3,1,1.3,1.06,1,1.20)
+WriteImage("C:/s04.gif")
+EraseArea()
+
+end
+
+#######################################################################
+procedure zoom01()
+
+#WAttrib("dx="||400,"dy="||300)
+
+floorBack01()
+
+zoomx(1,1,1,1.09,1)
+WriteImage("C:/z01.gif")
+EraseArea()
+
+floorBack01()
+
+zoomx(1.1,1.1,1.1,1.08,1.1)
+WriteImage("C:/z02.gif")
+EraseArea()
+
+floorBack01()
+
+zoomx(1.2,1.2,1.2,1.07,1.2)
+WriteImage("C:/z03.gif")
+EraseArea()
+
+floorBack01()
+
+zoomx(1.3,1.3,1.3,1.06,1.3)
+WriteImage("C:/z04.gif")
+EraseArea()
+
+#fc01()
+
+end
+#############################################################################################
+
+procedure floorBack01()
+
+WAttrib("dx="||1,"dy="||1)
+Fg("30000,1000,1000")
+ FillPolygon(50,300,500,300,500,400,50,400)
+Fg("30000,1000,1000")
+ FillPolygon(50,100,500,100,500,200,50,200)
+
+end
+
+###################################################################################################
+procedure fc01()
+
+ReadImage("/mnt/sda1/leonosv1/s01.gif")
+WDelay(.05)
+#EraseArea()
+ReadImage("/mnt/sda1/leonosv1/s02.gif")
+WDelay(.05)
+#EraseArea()
+ReadImage("/mnt/sda1/leonosv1/s03.gif")
+WDelay(.05)
+#EraseArea()
+ReadImage("/mnt/sda1/leonosv1/s04.gif")
+
+end
+
+##################################################################################################
+procedure fc02()
+
+ReadImage("/mnt/sda1/leonosv1/s04.gif")
+WDelay(.05)
+#EraseArea()
+ReadImage("/mnt/sda1/leonosv1/s03.gif")
+WDelay(.05)
+#EraseArea()
+ReadImage("/mnt/sda1/leonosv1/s02.gif")
+WDelay(.05)
+#EraseArea()
+ReadImage("/mnt/sda1/leonosv1/s01.gif")
+
+end
+
+####################################################################
+
+procedure skew(zqa,zqb,zqc,zqcc,zqd,zqw)
+
+#WAttrib("dx="||400,"dy="||300)
+
+#for movement
+abx := -115 + zqa
+abqy := -115 + zqb
+abw := 150 + zqc
+abh := 150 + zqd
+######################################
+#b 
+atx := -215 + zqa
+aty := 30 + zqb
+atw := 150 + zqc
+atww := 150 + zqcc
+ath := 1 + zqd
+############################
+#l
+alx := -300 * zqa
+aly := -125 * zqb
+alw := 1 + zqc
+alww := 1 + zqcc
+alh := 150 * zqd
+##############################
+#r
+arx := -175 * zqa
+ary := -125 * zqb
+arw := 1 + zqc
+arww := 1 + zqcc
+arh := 150 * zqd
+###########################
+#f1
+allx := -545 * zqw
+ally := -165 * zqb
+##################################
+#f2
+arrx := -145 * zqw
+arry := -165 * zqb
+##################################
+
+sider2(alx,aly,alw,alww,alh)#left side plane
+sidel2(arx,ary,arw,arww,arh)#right side plane
+frontWall01(allx,ally)
+frontWall01(arrx,arry)
+end
+
+####################################################################
+
+procedure zoomx(zqa,zqb,zqc,zqcc,zqd)
+
+#WAttrib("dx="||400,"dy="||300)
+
+#for movement
+abx := -115 + zqa
+abqy := -115 + zqb
+abw := 150 + zqc
+abh := 150 + zqd
+######################################
+#b 
+atx := -215 + zqa
+aty := 30 + zqb
+atw := 150 + zqc
+atww := 150 + zqcc
+ath := 1 + zqd
+############################
+#l
+alx := -300 * zqa
+aly := -125 * zqb
+alw := 1 + zqc
+alww := 1 + zqcc
+alh := 150 * zqd
+##############################
+#r
+arx := -175 * zqa
+ary := -125 * zqb
+arw := 1 + zqc
+arww := 1 + zqcc
+arh := 150 * zqd
+###########################
+frx := 1 * (-zqa * -30)
+fry := 1 * zqb
+frw := 1 * zqc
+frww := 1 * -zqcc
+frh := 75 * -zqd
+##################################
+sider2(alx,aly,alw,alww,alh)#left side plane
+sidel2(arx,ary,arw,arww,arh)#right side plane
+##back01(abx,abqy,abw,abh)#back image
+#sidel()#bottom plane
+#sider(atx,aty,atw,atww,ath)#bottom plane
+end
+
+
+################################################
+
+#################################################
+#floorx01()
+
+procedure floorx01(c,b,xc,zz,a)
+
+#xc := 1
+zz := 1
+
+bz := a
+az := 73
+cz := 55
+
+(qax := -150 + c,qbx := 150 + c,qcx := -150 + c,qdx := 150 + c,qay := -40 + b,qby := -40 + b,qcy := -40 + b,qdy := -40 + b)
+ 
+(wax := -150 + c,wbx := 150 + c,wcx := -150 + c,wdx := 150 + c,way := 130 + b,wby := 130 + b,wcy := 130 + b,wdy := 130 + b)
+
+#(qax := -200 + c,qbx := -75 + c,qcx := -200 + c,qdx := -75 + c,qay := -115 + b,qby := -115 + b,qcy := -115 + b,qdy := -115 + b)
+ 
+#(wax := -200 + c,wbx := -75 + c,wcx := -200 + c,wdx := -75 + c,way := -75 + b,wby := -75 + b,wcy := -75 + b,wdy := -75 + b)
+
+(eax := 75 + c,ebx := 75 + c,ecx := 75 + c,edx := 75 + c,eay := 100 + b,eby := 100 + b,ecy := 50 + b,edy := 50 + b)
+
+(rax := 75 + c,rbx := 125 + c,rcx := 125 + c,rdx := 75 + c,ray := 100 + b,rby := 100 + b,rcy := 50 + b,rdy := 50 + b)
+
+(tax := 75 + c,tbx := 75 + c,tcx := 125 + c,tdx := 125 + c,tay := 100 + b,tby := 100 + b,tcy := 100 + b,tdy := 100 + b)
+
+(yax := 125 + c,ybx := 125 + c,ycx := 125 + c,ydx := 125 + c,yay := 100 + b,yby := 100 + b,ycy := 50 + b,ydy := 50 + b)
+
+aax := (qax * bz/az) 
+abx := (qbx * bz/cz)
+acx := (qcx * bz/cz)
+adx := (qdx * bz/az) 
+
+aay := (qay * bz/az) 
+aby := (qby * bz/cz) 
+acy := (qcy * bz/cz)
+ady := (qdy * bz/az)
+
+bax := (wax * bz/az)
+bbx := (wbx * bz/cz)
+bcx := (wcx * bz/cz) 
+bdx := (wdx * bz/az) 
+
+bay := (way * bz/az)
+bby := (wby * bz/cz) 
+bcy := (wcy * bz/cz) 
+bdy := (wdy * bz/az)
+
+cax := (eax * bz/az) 
+cbx := (ebx * bz/cz) 
+ccx := (ecx * bz/cz) 
+cdx := (edx * bz/az)
+
+cay := (eay * bz/az) 
+cby := (eby * bz/cz) 
+ccy := (ecy * bz/cz) 
+cdy := (edy * bz/az)
+
+dax := (qax * bz/cz)
+dbx := (qbx * bz/cz)
+dcx := (qcx * bz/cz)
+ddx := (qdx * bz/cz) 
+
+day := (qay * bz/cz) 
+dby := (qby * bz/cz) 
+dcy := (qcy * bz/cz) 
+ddy := (qdy * bz/cz)
+
+eax := (tax * bz/az) 
+ebx := (tbx * bz/cz) 
+ecx := (tcx * bz/cz) 
+edx := (tdx * bz/az) 
+
+eay := (tay * bz/az)
+eby := (tby * bz/cz) 
+ecy := (tcy * bz/cz)
+edy := (tdy * bz/az)
+
+fax := (yax * bz/az) 
+fbx := (ybx * bz/cz) 
+fcx := (ycx * bz/cz)
+fdx := (ydx * bz/az)
+
+fay := (yay * bz/az)
+fby := (yby * bz/cz) 
+fcy := (ycy * bz/cz) 
+fdy := (ydy * bz/az)
+
+#######################################
+
+#facets presently not being used
+
+#Fg("red")
+ #FillPolygon(eax,eay,ebx,eby,ecx,ecy,edx,edy)
+
+#Fg("orange")
+ #FillPolygon(dax,day,dbx,dby,dcx,dcy,ddx,ddy)
+
+#Fg("blue")
+ #FillPolygon(fax,fay,fbx,fby,fcx,fcy,fdx,fdy)
+
+#########################################################
+
+#Fg("30000,30000,30000")
+ #FillPolygon(cax,cay,cbx,cby,ccx,ccy,cdx,cdy)
+
+Fg("8000,8000,8000")
+ #FillPolygon(aax,aay,abx,aby,acx,acy,adx,ady)
+FillPolygon(aax,aay,acx,aby,abx,acy,adx,ady)
+
+Fg("4000,4000,4000")
+# FillPolygon(bax,bay,bbx,bby,bcx,bcy,bdx,bdy)
+ FillPolygon(bax,bay,bcx,bby,bbx,bcy,bdx,bdy)
+
+end
+
+################################################
+procedure frontWall01(aa,bb)
+
+WAttrib("dx="||525,"dy="||300)
+
+ReadImage("C:/tp.gif",1,1)
+
+Zoom(200,1,200,250,1+aa,1+bb,200,250)
+
+end
+
+################################################
+procedure sider2(lx,ly,lw,lww,lh)
+
+WAttrib("dx="||525,"dy="||300)
+
+ReadImage("C:/tp.gif",1,1)
+
+a := 1
+b := 1
+c := 1
+d := 1
+
+aa := 1
+bb := 1
+cc := 1
+dd := 1
+
+every j := 0 to 200 do{
+
+a := a + 1
+if a < 100 then next
+
+aa := aa  -(lw-(tan(1)))
+if aa < -400 then next
+
+bb := bb - (2*0.2)
+if bb < -200 then next
+
+dd := dd + 1
+if dd < -200 then next
+
+Zoom(200+a,1+b,1+c,200+d,lx+aa,ly+bb,1,lh+dd)
+
+}
+
+end
+
+###########################################################################
+
+procedure sidel2(rx,ry,rw,rww,rh)
+
+WAttrib("dx="||525,"dy="||300)
+
+ReadImage("C:/tp.gif",1,1)
+
+a := 1
+b := 1
+c := 1
+d := 1
+
+aa := 1
+bb := 1
+cc := 1
+dd := 1
+
+every j := 0 to 200 do{
+
+a := a + 1
+if a < 100 then next
+
+aa := aa  -(rww-(tan(1)))
+if aa < -400 then next
+
+bb := bb - (2*0.2)
+if bb < -200 then next
+
+dd := dd + 1
+if dd < -200 then next
+
+Zoom(290+a,1+b,1+c,200+d,rx-aa,ry+bb,1,rh+dd)
+
+}
+
+end
+
+#############################################################
+
+procedure inputSkew01() 
+
+s1 := WRead()
+s2 := WRead()
+s3 := WRead()
+s4 := WRead()
+s5 := WRead()
+
+ixxx := s1
+iyyy := s2
+izzz := s3
+izzzz := s4
+iqqq := s5
+
+skew(ixxx,iyyy,izzz,izzzz,iqqq)
+
+end
+
+procedure inputBp01() 
+
+s1 := WRead()
+s2 := WRead()
+s3 := WRead()
+
+ixxx := s1
+iyyy := s2
+izzz := s3
+
+bp01(ixxx,iyyy,izzz)
+
+end
+
+procedure inputLwfz01() 
+
+s1 := WRead()
+s2 := WRead()
+s3 := WRead()
+
+ixxx := s1
+iyyy := s2
+izzz := s3
+
+lwfz01(ixxx,iyyy,izzz)
+
+end
+
+procedure inputLwfx01() 
+
+s1 := WRead()
+s2 := WRead()
+s3 := WRead()
+
+ixxx := s1
+iyyy := s2
+izzz := s3
+
+lwfx01(ixxx,iyyy,izzz)
+
+end
+
+
+
+
+#################################################################################################################
+procedure inputprompt() 
+#this works now!!!!!!
+s1 := WRead()
+
+ss1 :=( "cube01")
+ss2 :=( "cube04")
+ss3 :=( "ranhill")
+ss4 :=( "place")
+ss5 :=( "cube02")
+ss6 :=( "cube03")
+ss7 :=( "cube05")
+ss8 :=( "cube06")
+ss9 :=( "cube07")
+ss10 :=( "inpcube")
+ss11 :=( "inpcylinder")
+ss12 :=( "inplane")
+ss13 :=( "octinput")
+ss14 :=( "angle01")
+ss15 :=( "angle02")
+ss16 :=( "angle03")
+ss17 :=( "angle04")
+ss18 :=( "http")
+ss19 :=( "col01")
+ss20 :=( "bp01")
+ss21 :=( "lwfz01")
+ss22 :=( "lwfx01")
+ss23 :=( "skew")
+
+
+if s1== ss1 then inputCube01() 
+else
+if s1== ss2 then inputCube04() 
+else
+if s1== ss3 then hillbilly() 
+else
+if s1== ss4 then place() 
+else
+if s1== ss5 then inputCube02() 
+else
+if s1== ss6 then inputCube03() 
+else
+if s1== ss7 then inputCube05() 
+else
+if s1== ss8 then inputCube06() 
+else
+if s1== ss9 then inputCube07() 
+else
+if s1== ss10 then inpcube01() 
+else
+if s1== ss11 then inputcylinder01() 
+else
+if s1== ss12 then inputplane01() 
+else
+if s1== ss13 then octinput01() 
+else
+if s1== ss14 then angle01() 
+else
+if s1== ss15 then angle02() 
+else
+if s1== ss16 then angle03() 
+else
+if s1== ss17 then angle04()
+else
+if s1== ss18 then inputHttp()
+else
+if s1== ss19 then inputCol01() 
+else
+if s1== ss20 then inputBp01() 
+else
+if s1== ss21 then inputLwfz01() 
+else
+if s1== ss22 then inputLwfx01() 
+else
+if s1== ss23 then inputSkew01() 
+
+
+
+ 
+ 
+
+return
+
+end
